@@ -1,10 +1,43 @@
 {% extends 'default.html' %}
 
 
- {% block title %}
- Future Posts
- {% endblock title %}
+{% block title %}
+Future Posts
+{% endblock title %}
 
- {% block content %}
- Всё, что я сюда напишу, джанго отобразит на странице
- {% endblock content
+{% block content %}
+Всё, что я сюда напишу, джанго отобразит на странице
+<br>
+<br>
+<br>
+{% if posts%}
+{% for post in posts %}
+<table>
+    <tr>
+        <p style="text-align: left;">Заголовок: {{ post.title}}</p>
+        <p style="text-align: left;">Категория: {{ post.type }}
+            {% for cat in post.type.all %}
+            {{cat}}
+            {% endfor %}</p>
+        <p style="text-align: left;">Сообщение: {{ post.content }}</p>
+        <p style="text-align: left;">Изображение:
+            {% if post.upload %}
+                    <img src="{{ MEDIA_URL }}{{ post.upload.url }}" height="400" width="700" class="rounded mx-auto d-block" alt='Нет изображения'>
+
+                {% else %}
+                    <img src="/media/uploads/8.jpg.png" class="rounded mx-auto d-block" height="300" width="400">
+                {% endif %}</p>
+        <p style="text-align: left;"><span style="color: #999999;"><em>Дата публикации: {{ post.datecreation}}</em></span></p>
+        <p style="text-align: left;"><span style="color: #999999;"><em>Автор: {{ post.author }}</em></span></p>
+
+    </tr>
+    <br>
+    <hr>
+    <br>
+    {% endfor %}
+
+</table>
+{% else %}
+<h2>Сообщений нет!</h2>
+{% endif %}
+{% endblock content %}
