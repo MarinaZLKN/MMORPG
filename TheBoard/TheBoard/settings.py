@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'GameBoard',
+    'sign',
 
 ]
 
@@ -136,3 +137,6 @@ MEDIA_URL = '/media/'
 
 
 SITE_ID = 1
+
+LOGIN_URL = 'sign/login/'
+LOGIN_REDIRECT_URL = '/posts/'
