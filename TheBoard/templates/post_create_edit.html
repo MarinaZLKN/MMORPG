@@ -1,0 +1,14 @@
+{% extends 'default.html' %}
+
+{% block content %}
+<h1>Создание сообщения</h1>
+<hr>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if upload %}
+  <img src="{{ post.upload.url}}" alt="connect" style="max-height:400px">
+{% endif %}
+  <button type="submit">Сохранить</button>
+</form>
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% extends 'default.html' %}
+
+{% block content %}
+<table>
+    <tr>
+        <p style="text-align: left;">Заголовок: {{ post.title}}</p>
+        <p style="text-align: left;">Категория: {{ post.type }}
+            {% for cat in post.type.all %}
+            {{cat}}
+            {% endfor %}</p>
+        <p style="text-align: left;">Сообщение: {{ post.content|truncatechars:200 }}</p>
+        <p style="text-align: left;">Изображение: {% if post.upload %}
+                    <img src="{{ MEDIA_URL }}{{ post.upload.url }}" height="400" width="700" class="rounded mx-auto d-block" alt='Нет изображения'>
+
+                {% else %}
+                    <img src="/media/uploads/8.jpg.png" height="300" width="400" class="rounded mx-auto d-block">
+                {% endif %}</p>
+        <p style="text-align: left;"><span style="color: #999999;"><em>Дата публикации: {{ post.datecreation}}</em></span></p>
+        <p style="text-align: left;"><span style="color: #999999;"><em>Автор: {{ post.author }}</em></span></p>
+    </tr>
+    <br>
+    <hr>
+    <br>
+
+</table>
+{% endblock content %}
