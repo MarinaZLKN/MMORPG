@@ -44,3 +44,6 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class MainPage(TemplateView):
+    template_name = 'mainpage.html'
+
