@@ -129,7 +129,7 @@ MEDIA_URL = '/media/'
 SITE_ID = 1
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/posts'
 
 
 ACCOUNT_EMAIL_REQUIRED = True
