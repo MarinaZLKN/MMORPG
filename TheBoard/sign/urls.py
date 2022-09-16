@@ -1,7 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-
-from .views import BaseRegisterView, IndexView
+from .views import BaseRegisterView, upgrade_me
 
 urlpatterns = [
     path('login/',
@@ -13,5 +12,5 @@ urlpatterns = [
     path('signup/',
          BaseRegisterView.as_view(template_name='main_sign.html'),
          name='signup'),
-    path('signout/', IndexView.as_view(), name='sign-out'),
+    path('upgrade/', upgrade_me, name='upgrade'),
 ]
