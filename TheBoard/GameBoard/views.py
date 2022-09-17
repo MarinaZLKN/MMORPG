@@ -56,10 +56,11 @@ class MainPage(TemplateView):
 
 
 class Comments(PermissionRequiredMixin, CreateView):
+    permission_required = ('GameBoard.add_comment',)
     form_class = CommentForm
     model = Comment
     template_name = 'post.html'
-    #context_object_name = 'comments'
+    context_object_name = 'comments'
 
     def post(self, request, *args, **kwargs):
         post = Post.objects.get(pk=id)

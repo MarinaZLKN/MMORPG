@@ -23,7 +23,7 @@
     <br>
 
 </table>
-{%if commetns%}
+{%if comments%}
 {% for comment in comments %}
     <div class="comment">
         <p class="info">
@@ -35,6 +35,7 @@
 {% else %}
 <p>К данной записи комментариев пока нет.</p>
 {% endif %}
+<hr>
 {% if new_comment %}
     <h4>Ваш комментарй был добавлен.</h4>
 {% else %}

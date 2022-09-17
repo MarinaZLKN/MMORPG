@@ -8,5 +8,5 @@ urlpatterns = [
     path('update/<int:pk/', PostUpdate.as_view(), name='post_update'),
     path('mypage/', IndexView.as_view(), name='mypage'),
     path('', MainPage.as_view(), name='main'),
-    path('comm/', Comments.as_view(), name='comments')
+    path('comm/', Comments.as_view(), name='add_comment')
     ]
