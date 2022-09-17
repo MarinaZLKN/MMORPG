@@ -29,18 +29,17 @@
         <p class="info">
             Автор: {{ comment.author }}
         </p>
-        {{ comment.text }}
+        {{ comment.text }} <hr>
     </div>
 {% endfor %}
 {% else %}
 <p>К данной записи комментариев пока нет.</p>
 {% endif %}
-<hr>
 {% if new_comment %}
     <h4>Ваш комментарй был добавлен.</h4>
 {% else %}
     <h4>Добавьте комментарий:</h4>
-    <form action="." method="post">
+    <form action="{% url 'add_comment' post.pk %}" method="post">
         {{ form.as_p }}
         {% csrf_token %}
         <p><input type="submit" value="Добавить"></p>
