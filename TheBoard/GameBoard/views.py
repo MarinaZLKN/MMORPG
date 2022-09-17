@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 
-from .forms import PostForm
-from .models import Post
+from .forms import PostForm, CommentForm
+from .models import Post, Comment
 
 
 class PostList(ListView):
@@ -47,3 +48,29 @@ class IndexView(LoginRequiredMixin, TemplateView):
 class MainPage(TemplateView):
     template_name = 'mainpage.html'
 
+
+class Comment(PermissionRequiredMixin, CreateView):
+    form_class = CommentForm
+    model = Comment
+    template_name = 'post.html'
+    context_object_name = 'comments'
+
+    def post(self, request, *args, **kwargs):
+        post = Post.objects.get(pk=id)
+        # список одобренных комментариев
+        comments = post.comments.filter(is_accepted=True)
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            # если все ок, создаем обьект
+            new_comment = comment_form.save(commit=False)
+            # привязываем к посту
+            new_comment.post = post
+            # сохраняем в БД
+            new_comment.save()
+        else:
+            comment_form = CommentForm()
+        return render(request,
+                      'post.html',
+                      {'post': post,
+                       'comments': comments,
+                       'comment_form': comment_form})

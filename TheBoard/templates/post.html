@@ -23,4 +23,27 @@
     <br>
 
 </table>
+{%if commetns%}
+{% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            Автор: {{ comment.author }}
+        </p>
+        {{ comment.text }}
+    </div>
+{% endfor %}
+{% else %}
+<p>К данной записи комментариев пока нет.</p>
+{% endif %}
+{% if new_comment %}
+    <h4>Ваш комментарй был добавлен.</h4>
+{% else %}
+    <h4>Добавьте комментарий:</h4>
+    <form action="." method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Добавить"></p>
+    </form>
+{% endif %}
+
 {% endblock content %}
