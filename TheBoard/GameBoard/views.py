@@ -19,6 +19,12 @@ class PostDetail(DetailView):
     template_name = 'post.html'
     context_object_name = 'post'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(is_accepted=True)
+        context['form'] = CommentForm()
+        return context
+
 
 class PostCreate(PermissionRequiredMixin, CreateView):
     permission_required = ('GameBoard.add_post', )
@@ -49,17 +55,17 @@ class MainPage(TemplateView):
     template_name = 'mainpage.html'
 
 
-class Comment(PermissionRequiredMixin, CreateView):
+class Comments(PermissionRequiredMixin, CreateView):
     form_class = CommentForm
     model = Comment
     template_name = 'post.html'
-    context_object_name = 'comments'
+    #context_object_name = 'comments'
 
     def post(self, request, *args, **kwargs):
         post = Post.objects.get(pk=id)
         # список одобренных комментариев
         comments = post.comments.filter(is_accepted=True)
-        comment_form = CommentForm(data=request.POST)
+        comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             # если все ок, создаем обьект
             new_comment = comment_form.save(commit=False)

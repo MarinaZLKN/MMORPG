@@ -4,8 +4,8 @@ from .models import Post, Comment
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('author', 'text')
+    list_display = ('post', 'author', 'text')
 
 @admin.register(Post)
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'datecreation', )
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'datecreation')
