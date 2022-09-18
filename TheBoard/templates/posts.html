@@ -32,13 +32,17 @@
         <p style="text-align: left;"><span style="color: #999999;"><em>Автор: {{ post.author }}</em></span></p>
 
     </tr>
+    <button> <a href="{% url 'post_detail' pk=post.pk %}"> Подробнее</a> </button>
     <br>
     <hr>
     <br>
+
     {% endfor %}
 
 </table>
 {% else %}
 <h2>Сообщений нет!</h2>
 {% endif %}
+
+
 {% endblock content %}
