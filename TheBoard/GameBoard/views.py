@@ -1,8 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
-
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
 
@@ -62,8 +61,8 @@ class Comments(PermissionRequiredMixin, CreateView):
     template_name = 'post.html'
     context_object_name = 'comments'
 
-    def post(self, request, *args, **kwargs):
-        post = Post.objects.get(pk=id)
+    def post(self, request, pk, *args, **kwargs):
+        post = Post.objects.get(pk=pk)
         # список одобренных комментариев
         comments = post.comments.filter(is_accepted=True)
         comment_form = CommentForm(request.POST)
@@ -81,3 +80,5 @@ class Comments(PermissionRequiredMixin, CreateView):
                       {'post': post,
                        'comments': comments,
                        'comment_form': comment_form})
+
+
