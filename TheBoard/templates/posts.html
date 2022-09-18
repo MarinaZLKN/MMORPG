@@ -15,12 +15,12 @@
 {% for post in posts %}
 <table>
     <tr>
-        <p style="text-align: left;">Заголовок: {{ post.title}}</p>
+        <p style="text-align: left;">Заголовок: <b>{{ post.title}}</b></p>
         <p style="text-align: left;">Категория: {{ post.type }}
             {% for cat in post.type.all %}
             {{cat}}
             {% endfor %}</p>
-        <p style="text-align: left;">Сообщение: {{ post.content }}</p>
+        <p style="text-align: left;">Сообщение: {{ post.content|truncatechars:500 }}</p>
         <p style="text-align: left;">
             {% if post.upload %}
                     <img src="{{ MEDIA_URL }}{{ post.upload.url }}" height="400" width="700" class="rounded mx-auto d-block" alt='Нет изображения'>

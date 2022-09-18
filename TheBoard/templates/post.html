@@ -3,13 +3,13 @@
 {% block content %}
 <table>
     <tr>
-        <p style="text-align: left;">Заголовок: {{ post.title}}</p>
+        <p style="text-align: left;">Заголовок:<b>{{ post.title}}</b> </p>
         <p style="text-align: left;">Категория: {{ post.type }}
             {% for cat in post.type.all %}
             {{cat}}
             {% endfor %}</p>
-        <p style="text-align: left;">Сообщение: {{ post.content|truncatechars:200 }}</p>
-        <p style="text-align: left;">Изображение: {% if post.upload %}
+        <p style="text-align: left;">Сообщение: {{ post.content }}</p>
+        <p style="text-align: left;">{% if post.upload %}
                     <img src="{{ MEDIA_URL }}{{ post.upload.url }}" height="400" width="700" class="rounded mx-auto d-block" alt='Нет изображения'>
 
                 {% else %}
@@ -39,7 +39,7 @@
     <h4>Ваш комментарй был добавлен.(на рассмотрении?)</h4>
 {% else %}
     <h4>Добавьте комментарий:</h4>
-    <form action="{% url 'add_comment' post.pk %}" method="post">
+    <form action="{% url 'add_comment' pk=post.pk %}" method="post">
         {{ form.as_p }}
         {% csrf_token %}
         <p><input type="submit" value="Добавить"></p>

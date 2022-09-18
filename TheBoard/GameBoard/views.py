@@ -20,7 +20,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(is_accepted=True)
+        context['comments'] = Comment.objects.filter(post__pk=self.kwargs.get('pk'), is_accepted=True)
         context['form'] = CommentForm()
         return context
 
@@ -60,6 +60,9 @@ class Comments(PermissionRequiredMixin, CreateView):
     model = Comment
     template_name = 'post.html'
     context_object_name = 'comments'
+
+    def get_success_URL(self):
+        return reverse('request: post_detail', kwargs={'pk': self.object.post.pk})
 
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
