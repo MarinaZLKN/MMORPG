@@ -4,6 +4,20 @@
 
 {% if is_not_premium %}
 <button> <a href="/sign/upgrade/"> Хочу Premium!</a> </button>
-{% endif %}
 
+{% else %}
+{%if comments%}
+{%for comment in comments%}
+<table>
+    <tr>
+    <p style="text-align: left;">Автор: <b>{{ comment.author}}</b></p>
+    <p style="text-align: left;">Комментарий: <b>{{ comment.text}}</b></p>
+    </tr>
+    <br>
+    <hr>
+    <br>
+    {% endfor %}
+</table>
+{% endif %}
+{% endif %}
 {% endblock content%}
