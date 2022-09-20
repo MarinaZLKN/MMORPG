@@ -1,0 +1,11 @@
+{% extends 'default.html' %}
+
+{% block content %}
+<h5>Удаление данного комментария удалит его навсегда</h5>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Удаляем "{{ comment }}"?</p>
+    <input type="submit" value="Delete" />
+</form>
+{% endblock content %}

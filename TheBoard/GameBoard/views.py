@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, DeleteView
 
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
@@ -89,6 +89,14 @@ class Comments(PermissionRequiredMixin, CreateView):
                           {'post': post,
                            'comment': comment,
                            'comment_form': comment_form})
+
+
+class DeleteComment(DeleteView):
+    model = Comment
+    template_name = 'delete.html'
+    success_url = reverse_lazy('mypage')
+
+
 
 
 

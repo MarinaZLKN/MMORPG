@@ -7,13 +7,16 @@
 
 {% else %}
 {%if comments%}
+<h4>Комментарии, ожидающие модерацию:</h4>
+<br>
+
 {%for comment in comments%}
 <table>
     <tr>
     <p style="text-align: left;">Автор: <b>{{ comment.author}}</b></p>
     <p style="text-align: left;">Комментарий: <b>{{ comment.text}}</b></p>
     </tr>
-    <br>
+    <a href="">Опубликовать</a> | <a href="{% url 'delete_comment' comment.id %}">Удалить</a>
     <hr>
     <br>
     {% endfor %}
