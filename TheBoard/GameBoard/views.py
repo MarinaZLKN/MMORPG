@@ -72,7 +72,7 @@ class Comments(PermissionRequiredMixin, CreateView):
 
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
-        comments = Comment.objects.create(post=self.post, user=self.request.user, content='text')
+        comment = Comment.objects.create(post=post, author=self.request.user, text='text')
         if request.method == 'POST':
             comment_form = CommentForm(data=request.POST)
             if comment_form.is_valid():
@@ -87,10 +87,8 @@ class Comments(PermissionRequiredMixin, CreateView):
             return render(request,
                           'post.html',
                           {'post': post,
-                           'comments': comments,
+                           'comment': comment,
                            'comment_form': comment_form})
-
-
 
 
 
