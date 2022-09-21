@@ -11,6 +11,6 @@ urlpatterns = [
     path('', MainPage.as_view(), name='main'),
     path('<int:pk>/add_comment/', Comments.as_view(), name='add_comment'),
     path('delete/<int:pk>/', DeleteComment.as_view(), name='delete_comment'),
-    path('<int:pk>/approve/', approve, name='approve')
+    path('approve/<int:pk>/', approve, name='approve')
 
     ]

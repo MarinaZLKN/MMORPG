@@ -9,14 +9,25 @@ from django.views.generic.edit import DeleteView
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
 
+@login_required
+def approve(request, pk):
+    comment_id = request.POST.get('comment_id')
+    comment = Comment.objects.get(pk=comment_id, is_accepted=False)
+    if request.method == 'POST':
+        comment.is_accepted = True
+        comment.user = request.user
+        comment.save()
+        return HttpResponseRedirect(reverse_lazy('posts'))
+    return HttpResponseRedirect(f'/mypage/')
 
-@login_required()
+
+'''@login_required()
 def approve(request, pk):
     instanse = Comment.objects.filter(post_id=pk)
     if request.method == 'POST':
         Comment.objects.filter(post_id=pk).update(is_accepted=True)
         return HttpResponseRedirect(reverse_lazy('posts'))
-    return HttpResponseRedirect(f'/mypage/')
+    return HttpResponseRedirect(f'/mypage/')'''
 
 
 class PostList(ListView):
@@ -92,11 +103,8 @@ class Comments(PermissionRequiredMixin, CreateView):
                 new_comment.save()
             else:
                 comment_form = CommentForm()
-            return render(request,
-                          'post.html',
-                          {'post': post,
-                           'comment': comment,
-                           'comment_form': comment_form})
+        return render(request,
+                    'post.html', {'post': post, 'comment': comment, 'comment_form': comment_form})
 
 
 class DeleteComment(DeleteView):
