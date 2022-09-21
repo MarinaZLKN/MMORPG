@@ -1,12 +1,22 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
-from django.views.generic.edit import FormMixin, DeleteView
+from django.views.generic.edit import DeleteView
 
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
+
+
+@login_required()
+def approve(request, pk):
+    instanse = Comment.objects.filter(post_id=pk)
+    if request.method == 'POST':
+        Comment.objects.filter(post_id=pk).update(is_accepted=True)
+        return HttpResponseRedirect(reverse_lazy('posts'))
+    return HttpResponseRedirect(f'/mypage/')
 
 
 class PostList(ListView):
@@ -29,7 +39,6 @@ class PostDetail(DetailView):
 
     def get_success_url(self, **kwargs):
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
-
 
 
 class PostCreate(PermissionRequiredMixin, CreateView):
@@ -55,7 +64,7 @@ class IndexView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_premium'] = not self.request.user.groups.filter(name='premium').exists()
-        context['comments'] = Comment.objects.filter(post__author=self.request.user)
+        context['comments'] = Comment.objects.filter(post__author=self.request.user, is_accepted=False)
         return context
 
 
@@ -76,7 +85,6 @@ class Comments(PermissionRequiredMixin, CreateView):
         if request.method == 'POST':
             comment_form = CommentForm(data=request.POST)
             if comment_form.is_valid():
-                # если все ок, создаем обьект
                 new_comment = comment_form.save(commit=False)
                 # привязываем к посту
                 new_comment.post = post
@@ -95,6 +103,7 @@ class DeleteComment(DeleteView):
     model = Comment
     template_name = 'delete.html'
     success_url = reverse_lazy('mypage')
+
 
 
 

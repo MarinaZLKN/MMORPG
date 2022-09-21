@@ -25,7 +25,7 @@ class Post(models.Model):
     upload = models.FileField(upload_to='uploads/', blank=True, verbose_name='Изображение')
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.title}, {self.type}'
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
