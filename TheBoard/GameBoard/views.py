@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
@@ -15,6 +16,7 @@ def approve(request, pk):
     if request.method == 'POST':
         comment.is_accepted = True
         comment.save()
+
     return HttpResponseRedirect(f'/posts/')
 
 
@@ -43,6 +45,7 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(post__pk=self.kwargs.get('pk'))
         context['form'] = CommentForm()
+        context['date'] = datetime.utcnow()
         return context
 
     def get_success_url(self, **kwargs):
@@ -80,16 +83,16 @@ class MainPage(TemplateView):
     template_name = 'mainpage.html'
 
 
-class Comments(PermissionRequiredMixin, CreateView):
-    permission_required = ('GameBoard.add_comment',)
+class Comments(CreateView):
+    #permission_required = ('GameBoard.add_comment',)PermissionRequiredMixin,
     form_class = CommentForm
+    ordering = '-date'
     model = Comment
     template_name = 'post.html'
     context_object_name = 'comments'
 
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
-        comment = Comment.objects.create(post=post, author=self.request.user, text='text')
         if request.method == 'POST':
             comment_form = CommentForm(data=request.POST)
             if comment_form.is_valid():
@@ -101,7 +104,7 @@ class Comments(PermissionRequiredMixin, CreateView):
             else:
                 comment_form = CommentForm()
         return render(request,
-                    'post.html', {'post': post, 'comment': comment, 'comment_form': comment_form})
+                    'post.html', {'post': post, 'comment': new_comment, 'comment_form': comment_form})
 
 
 class DeleteComment(DeleteView):

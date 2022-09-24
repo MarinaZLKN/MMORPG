@@ -20,10 +20,10 @@
     <form action="{% url 'approve' comment.id %}" method="post">
         {% csrf_token %}
         <button type="submit">Принять</button>
-    </form>--<form action="{% url 'disapprove' comment.id %}" method="post">
+    </form>  | <form action="{% url 'disapprove' comment.id %}" method="post">
         {% csrf_token %}
         <button type="submit">Отклонить</button>
-    </form>--<form action="{% url 'delete_comment' comment.id %}" method="post">
+    </form>  | <form action="{% url 'delete_comment' comment.id %}" method="post">
         {% csrf_token %}
         <button type="submit">Удалить</button>
 

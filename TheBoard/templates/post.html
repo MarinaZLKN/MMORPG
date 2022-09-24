@@ -27,6 +27,7 @@
 {% for comment in comments %}
     <div class="comment">
         <p class="info">
+            <p style="text-align: left;"><span style="color: #999999;"><em>Дата публикации: {{ date|date:'M d Y' }}</em></span></p>
             Автор: {{ comment.author }}
         </p>
         <div class="comment-text">
