@@ -17,7 +17,17 @@
     <p style="text-align: left;">Автор: <b>{{ comment.author}}</b></p>
     <p style="text-align: left;">Комментарий: <b>{{ comment.text}}</b></p>
     </tr>
-    <a href="{% url 'approve' comment.id %}">Опубликовать</a> | <a href="{% url 'delete_comment' comment.id %}">Удалить</a>
+    <form action="{% url 'approve' comment.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Принять</button>
+    </form>--<form action="{% url 'disapprove' comment.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Отклонить</button>
+    </form>--<form action="{% url 'delete_comment' comment.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Удалить</button>
+
+
     <hr>
     <br>
     {% endfor %}

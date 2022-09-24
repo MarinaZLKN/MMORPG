@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import PostList, PostDetail, PostCreate, PostUpdate, IndexView, MainPage, Comments, DeleteComment, approve, disapprove
+from .views import PostList, PostDetail, PostCreate, PostUpdate, IndexView, MainPage, Comments, DeleteComment, approve,\
+    disapprove
 
 urlpatterns = [
     path('posts/', PostList.as_view(), name='home'),

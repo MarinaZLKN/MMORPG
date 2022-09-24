@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 from django.views.generic.edit import DeleteView
-
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
+
 
 @login_required
 def approve(request, pk):
@@ -15,17 +15,15 @@ def approve(request, pk):
     if request.method == 'POST':
         comment.is_accepted = True
         comment.save()
-        # return HttpResponseRedirect(reverse_lazy('posts'))
-    return HttpResponseRedirect(f'/mypage/')
+    return HttpResponseRedirect(f'/posts/')
+
 
 @login_required
 def disapprove(request, pk):
     comment = Comment.objects.get(id=pk)
     if request.method == 'POST':
         comment.is_accepted = False
-        # comment.user = request.user
         comment.save()
-        # return HttpResponseRedirect(reverse_lazy('posts'))
     return HttpResponseRedirect(f'/mypage/')
 
 
