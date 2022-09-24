@@ -25,7 +25,7 @@ class Post(models.Model):
     upload = models.FileField(upload_to='uploads/', blank=True, verbose_name='Изображение')
 
     def __str__(self):
-        return f'{self.title}, {self.type}'
+        return f'{self.title}'
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
@@ -47,4 +47,4 @@ class Comment(models.Model):
     is_accepted = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.text}'
+        return f'{self.text} - {self.id}'

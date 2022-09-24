@@ -11,23 +11,22 @@ from .models import Post, Comment
 
 @login_required
 def approve(request, pk):
-    comment_id = request.POST.get('comment_id')
-    comment = Comment.objects.get(pk=comment_id, is_accepted=False)
+    comment = Comment.objects.get(id=pk)
     if request.method == 'POST':
         comment.is_accepted = True
-        comment.user = request.user
         comment.save()
-        return HttpResponseRedirect(reverse_lazy('posts'))
+        # return HttpResponseRedirect(reverse_lazy('posts'))
     return HttpResponseRedirect(f'/mypage/')
 
-
-'''@login_required()
-def approve(request, pk):
-    instanse = Comment.objects.filter(post_id=pk)
+@login_required
+def disapprove(request, pk):
+    comment = Comment.objects.get(id=pk)
     if request.method == 'POST':
-        Comment.objects.filter(post_id=pk).update(is_accepted=True)
-        return HttpResponseRedirect(reverse_lazy('posts'))
-    return HttpResponseRedirect(f'/mypage/')'''
+        comment.is_accepted = False
+        # comment.user = request.user
+        comment.save()
+        # return HttpResponseRedirect(reverse_lazy('posts'))
+    return HttpResponseRedirect(f'/mypage/')
 
 
 class PostList(ListView):
@@ -44,7 +43,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(post__pk=self.kwargs.get('pk'), is_accepted=True)
+        context['comments'] = Comment.objects.filter(post__pk=self.kwargs.get('pk'))
         context['form'] = CommentForm()
         return context
 
