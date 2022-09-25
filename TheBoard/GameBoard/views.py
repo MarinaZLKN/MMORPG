@@ -6,6 +6,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 from django.views.generic.edit import DeleteView
+
+from .filters import CommentFilter
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
 
@@ -72,10 +74,17 @@ class IndexView(LoginRequiredMixin, ListView):
     model = Comment
     template_name = 'mypage.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = CommentFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_premium'] = not self.request.user.groups.filter(name='premium').exists()
-        context['comments'] = Comment.objects.filter(post__author=self.request.user, is_accepted=False)
+        context['comments'] = Comment.objects.filter(post__author=self.request.user, is_accepted=False).order_by('-date')
+        context['allcomments'] = Comment.objects.filter(post__author=self.request.user).order_by('-date')
+        context['filterset'] = self.filterset
         return context
 
 

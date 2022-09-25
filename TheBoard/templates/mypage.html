@@ -25,13 +25,41 @@
         <button type="submit">Отклонить</button>
     </form>  | <form action="{% url 'delete_comment' comment.id %}" method="post">
         {% csrf_token %}
-        <button type="submit">Удалить</button>
+        <button type="submit">Удалить</button></form>
 
 
     <hr>
     <br>
     {% endfor %}
+    </table>
+{% endif %}
+<form action="" method="get">
+
+       {{ filterset.form.as_p }}
+
+       <input type="submit" value="Найти" />
+   </form>
+
+       <table class="table table-striped">
+           <tr>
+               <td>Автор: </td>
+               <td>Число: </td>
+               <td>Комментарий: </td>
+               <td>Статус: </td>
+
+           </tr>
+
+           {% for com in allcomments %}
+           <tr>
+               <td>{{ com.author }}</td>
+               <td>{{ com.date }}</td>
+               <td>{{ com.text|truncatechars:30 }}</td>
+               <td>{{ com.is_accepted }}</td>
+
+           </tr>
+           {% endfor %}
+
+       </table>
+{% endif %}
 </table>
-{% endif %}
-{% endif %}
 {% endblock content%}
