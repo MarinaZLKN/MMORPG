@@ -1,12 +1,12 @@
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 from django.views.generic.edit import DeleteView
-
 from .filters import CommentFilter
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
@@ -18,8 +18,7 @@ def approve(request, pk):
     if request.method == 'POST':
         comment.is_accepted = True
         comment.save()
-
-    return HttpResponseRedirect(f'/posts/')
+    return HttpResponseRedirect(f'/mypage/')
 
 
 @login_required
@@ -73,9 +72,11 @@ class PostUpdate(PermissionRequiredMixin, UpdateView):
 class IndexView(LoginRequiredMixin, ListView):
     model = Comment
     template_name = 'mypage.html'
+    paginate_by = 3
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = Comment.objects.filter(post__author=self.request.user)
         self.filterset = CommentFilter(self.request.GET, queryset)
         return self.filterset.qs
 
@@ -86,6 +87,14 @@ class IndexView(LoginRequiredMixin, ListView):
         context['allcomments'] = Comment.objects.filter(post__author=self.request.user).order_by('-date')
         context['filterset'] = self.filterset
         return context
+
+    '''def listing(request):
+        all_comments = Comment.objects.filter(post__author=request.user).order_by('-date')
+        paginator = Paginator(all_comments, 3)
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'mypage.html', {'page_obj': page_obj})'''
 
 
 class MainPage(TemplateView):
