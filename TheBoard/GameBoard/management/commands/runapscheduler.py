@@ -3,7 +3,6 @@ from datetime import datetime
 
 from allauth.account.models import EmailAddress
 from django.conf import settings
-
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django.contrib.auth.models import User
@@ -13,7 +12,7 @@ from django.template.loader import render_to_string
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from TheBoard.GameBoard.models import Post
+from GameBoard.models import Post
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +53,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             my_job,
-            trigger=CronTrigger(second="*/10"), #day_of_week="mon", hour="00", minute="00"
+            trigger=CronTrigger(day_of_week="mon", hour="00", minute="00"),
             id="my_job",
             max_instances=1,
             replace_existing=True,

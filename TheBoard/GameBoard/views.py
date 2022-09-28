@@ -35,6 +35,7 @@ class PostList(ListView):
     ordering = '-datecreation'
     template_name = 'posts.html'
     context_object_name = 'posts'
+    paginate_by = 5
 
 
 class PostDetail(DetailView):
@@ -72,6 +73,7 @@ class PostUpdate(PermissionRequiredMixin, UpdateView):
 class IndexView(LoginRequiredMixin, ListView):
     model = Comment
     template_name = 'mypage.html'
+    paginate_by = 3
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -83,24 +85,16 @@ class IndexView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['is_not_premium'] = not self.request.user.groups.filter(name='premium').exists()
         context['comments'] = Comment.objects.filter(post__author=self.request.user).order_by('-date') #, is_accepted=False
-        context['allcomments'] = Comment.objects.filter(post__author=self.request.user).order_by('-date')
+        #context['allcomments'] = Comment.objects.filter(post__author=self.request.user).order_by('-date')
         context['filterset'] = self.filterset
         return context
-
-    '''def listing(request):
-        all_comments = Comment.objects.filter(post__author=request.user).order_by('-date')
-        paginator = Paginator(all_comments, 3)
-
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, 'mypage.html', {'page_obj': page_obj})'''
 
 
 class MainPage(TemplateView):
     template_name = 'mainpage.html'
 
 
-class Comments(PermissionRequiredMixin,CreateView):
+class Comments(PermissionRequiredMixin, CreateView):
     permission_required = ('GameBoard.add_comment',)
     form_class = CommentForm
     ordering = '-date'
@@ -118,7 +112,7 @@ class Comments(PermissionRequiredMixin,CreateView):
                 new_comment.save()
             else:
                 comment_form = CommentForm()
-        return render(request, 'post.html', {'post': post, 'comment': new_comment, 'comment_form': comment_form})
+        return render(request, 'post.html', {'post': post, 'comment': new_comment, 'form': comment_form})
 
 
 class DeleteComment(DeleteView):

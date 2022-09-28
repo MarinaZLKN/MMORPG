@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -17,7 +18,7 @@ class Post(models.Model):
         ('spellmaster', 'Мастера заклинаний'),
     ]
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Автор')
     title = models.CharField(max_length=255, verbose_name="Заголовок")
     datecreation = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     type = models.CharField(max_length=16, choices=TYPES, default='merchant', verbose_name='Категория')

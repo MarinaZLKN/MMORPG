@@ -1,5 +1,5 @@
 {% extends 'default.html' %}
-
+{% load custom_tags %}
 {% block content%}
 
 {% if is_not_premium %}
@@ -12,10 +12,12 @@
        {{ filterset.form }}
        <input type="submit" value="Найти" />
    </form>
+    {% endfor %}
 <br>
-<h4>Комментарии, ожидающие модерацию:</h4>
+<h4>Все комментарии, адресованные вам:</h4>
 {%if comments%}
 <br>
+
 {%for comment in comments%}
 <table>
     <tr>
@@ -33,13 +35,30 @@
     </form>  | <form action="{% url 'delete_comment' comment.id %}" method="post">
         {% csrf_token %}
         <button type="submit">Удалить</button></form>
-
-
     <hr>
     <br>
     {% endfor %}
     </table>
 {% endif %}
-</table>
 
+
+{% if page_obj.has_previous %}
+       <a href="?{% url_replace page=1 %}">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+{% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
 {% endblock content%}
