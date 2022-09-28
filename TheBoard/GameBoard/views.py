@@ -72,7 +72,6 @@ class PostUpdate(PermissionRequiredMixin, UpdateView):
 class IndexView(LoginRequiredMixin, ListView):
     model = Comment
     template_name = 'mypage.html'
-    paginate_by = 3
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -83,7 +82,7 @@ class IndexView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_premium'] = not self.request.user.groups.filter(name='premium').exists()
-        context['comments'] = Comment.objects.filter(post__author=self.request.user, is_accepted=False).order_by('-date')
+        context['comments'] = Comment.objects.filter(post__author=self.request.user).order_by('-date') #, is_accepted=False
         context['allcomments'] = Comment.objects.filter(post__author=self.request.user).order_by('-date')
         context['filterset'] = self.filterset
         return context
@@ -101,8 +100,8 @@ class MainPage(TemplateView):
     template_name = 'mainpage.html'
 
 
-class Comments(CreateView):
-    #permission_required = ('GameBoard.add_comment',)PermissionRequiredMixin,
+class Comments(PermissionRequiredMixin,CreateView):
+    permission_required = ('GameBoard.add_comment',)
     form_class = CommentForm
     ordering = '-date'
     model = Comment
@@ -115,14 +114,11 @@ class Comments(CreateView):
             comment_form = CommentForm(data=request.POST)
             if comment_form.is_valid():
                 new_comment = comment_form.save(commit=False)
-                # привязываем к посту
                 new_comment.post = post
-                # сохраняем в БД
                 new_comment.save()
             else:
                 comment_form = CommentForm()
-        return render(request,
-                    'post.html', {'post': post, 'comment': new_comment, 'comment_form': comment_form})
+        return render(request, 'post.html', {'post': post, 'comment': new_comment, 'comment_form': comment_form})
 
 
 class DeleteComment(DeleteView):

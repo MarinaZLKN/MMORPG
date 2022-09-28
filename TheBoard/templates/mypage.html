@@ -58,7 +58,7 @@
                <td>{{ com.is_accepted }}</td>
                <td> <form method="POST">
                 {% csrf_token %}
-                <select name="status" size="1">
+                <select id="Comment" name="is_accepted" size="1">
                       <option value="NoValue">-------</option>
                       <option value="True">Разрешить</option>
                       <option value="False">Запретить</option>
@@ -72,23 +72,6 @@
            </table>
 
 
-{% if page_obj.has_previous %}
-       <a href="?page=1">1</a>
-       {% if page_obj.previous_page_number != 1 %}
-           ...
-           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-       {% endif %}
-   {% endif %}
-
-   {{ page_obj.number }}
-
-   {% if page_obj.has_next %}
-       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-       {% if paginator.num_pages != page_obj.next_page_number %}
-           ...
-           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-       {% endif %}
-   {% endif %}
 
 
 {% endif %}
